@@ -101,7 +101,11 @@ Lista* insere_fim(Lista* lista, int n){
 
     return lista;
 }
-Lista printlista(){
-return *lista;
+void printlista(Lista lista){
+    while(lista != NULL){
+        printf("%d",&lista->info);
+        lista = lista->prox;
+    }
+     printf("\n");
 }
 
