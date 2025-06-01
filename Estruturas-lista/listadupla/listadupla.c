@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct TLdupla{
+typedef struct TLdupla{
 int info;
 struct TLdupla *prox;
 struct TLdupla *ant;
-};
-typedef struct TLdupla ListaDupla;
+}Lista;
 
-int insereini(ListaDupla **l, ListaDupla **fim, int num){
+int insere_ini(Lista **l, ListaDupla **fim, int n){
 
-    ListaDupla *p =(ListaDupla*) malloc(sizeof(ListaDupla));
-    p->info = num;
+    Lista *p =(Lista*) malloc(sizeof(Lista));
+    p->info = n;
 
     if(*l == NULL){
 
@@ -30,21 +29,79 @@ int insereini(ListaDupla **l, ListaDupla **fim, int num){
         return 1;
 }
 
-ListaDupla remove_ini(ListaDupla *ini){
-return 0;
+Lista* remove_ini(Lista *lista){
+    if(lista == NULL){
+        return lista;
+    }
+    Lista *temp = lista;
+    lista = lista->prox;
+    if(lista != NULL){
+        lista->ant = NULL;
+    }
+    free(temp);
+    return lista;
 }
 
-ListaDupla insere_ord(){
+Lista* insere_ord(Lista *lista, int n){
+
+    if (lista == NULL) {
+        Lista* novo = (Lista*) malloc(sizeof(Lista));
+        novo->info = n;
+        novo->prox = NULL;
+        novo->ant = NULL;
+        return novo;
+    }
+
+    if(n < lista->info){
+        Lista* fim = NULL;
+        insere_ini(&lista, &fim, n);
+    return lista;
+    }
+
+    Lista* aux = lista;
+    while(aux != NULL && aux->info < n){
+        aux = aux->prox;
+    }
+
+    if(aux == NULL){
+        return insere_fim(lista,n);
+    }
+
+    Lista* novo = (Lista*) malloc(sizeof(Lista));
+    novo->info = n;
+    novo->prox = aux;
+    novo->ant = aux->ant;
+
+    if (aux->ant != NULL) {
+         aux->ant->prox = novo;
+    }
+     aux->ant = novo;
+
+    return lista;
+}
+
+Lista* insere_fim(Lista* lista, int n){
+
+    Lista* novo = (Lista*) malloc(sizeof(Lista));
+    novo->info = n;
+    novo->prox = NULL;
+    novo->ant = NULL;
+
+    if(lista == NULL){
+    return novo;
+    }
+
+    Lista* aux = lista;
+    while(aux->prox != NULL){
+        aux = aux->prox;
+    }
+
+    novo->ant = aux;
+    aux->prox = novo;
+
+    return lista;
+}
+Lista printlista(){
 return *lista;
 }
-ListaDupla printlista(){
-return *lista;
-}
 
-int main(void){
-
-    ListaDupla lista;
-    insereini(*lista);
-
-return 0;
-}
