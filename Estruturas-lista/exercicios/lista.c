@@ -111,5 +111,23 @@ Lista* remove(Lista* lista, int n){
     return lista;
 }
 
+bool busca(Lista* lista, int n){
 
+    Lista *aux = lista;
+    while(aux != NULL){
+        if(aux->info == n){
+            return true;
     }
+        aux = aux->prox;
+    }
+    return false;
+}
+
+int conta_element(Lista* lista){
+    int cont = 0;
+    while(lista->prox != NULL){
+        cont++;
+        lista = lista->prox;
+    }
+return cont;
+}
