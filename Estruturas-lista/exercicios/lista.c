@@ -82,3 +82,34 @@ Lista* insere_ordem(Lista* lista, int n){
     aux->prox = novo;
     return lista;
 }
+
+Lista* remove(Lista* lista, int n){
+
+    if(lista == NULL){
+        return lista;
+    }
+
+    if(lista->info == n){
+        Lista *temp = lista;
+        lista = lista->prox;
+        free(temp);
+        return lista;
+    }
+
+    Lista* aux = lista;
+    while(aux->prox != NULL && aux->prox->info != n){
+        aux = aux->prox;
+    }
+
+    if (aux->prox != NULL && aux->prox->info == n) {
+    Lista* temp = aux->prox;
+    aux->prox = temp->prox;
+    free(temp);
+}
+
+
+    return lista;
+}
+
+
+    }
