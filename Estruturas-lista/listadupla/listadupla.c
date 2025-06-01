@@ -102,6 +102,7 @@ Lista* insere_fim(Lista* lista, int n){
 
     return lista;
 }
+
 void printlista(Lista* lista){
     while(lista != NULL){
         printf("%d",&lista->info);
