@@ -6,8 +6,9 @@ int info;
 struct TLdupla *prox;
 struct TLdupla *ant;
 }Lista;
+Lista* insere_fim(Lista* lista, int n);
 
-int insere_ini(Lista **l, ListaDupla **fim, int n){
+int insere_ini(Lista **l, Lista **fim, int n){
 
     Lista *p =(Lista*) malloc(sizeof(Lista));
     p->info = n;
@@ -21,9 +22,9 @@ int insere_ini(Lista **l, ListaDupla **fim, int n){
 
         }
         else{
-            P->ant = NULL;
+            p->ant = NULL;
             p->prox = *l;
-            *l->ant = p;
+            (*l)->ant = p;
             *l = p;
         }
         return 1;
@@ -101,7 +102,7 @@ Lista* insere_fim(Lista* lista, int n){
 
     return lista;
 }
-void printlista(Lista lista){
+void printlista(Lista* lista){
     while(lista != NULL){
         printf("%d",&lista->info);
         lista = lista->prox;
