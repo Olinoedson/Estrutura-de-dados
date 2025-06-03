@@ -105,15 +105,17 @@ int exclui_fim(Lista* lista){
         return 1;
     }
     if(lista->ini == lista->fim){
-        exclui_ini(&lista);
+        exclui_ini(lista);
         return 1;
     }
-    No aux = lista->ini;
+    No* aux = lista->ini;
     while(aux->prox->prox != NULL){
         aux = aux->prox;
     }
+    free(aux->prox);
+    aux->prox = NULL;
     lista->fim = aux;
-
+    return 1;
 }
 
 int main() {
