@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct TInfo{
 int matricula;
@@ -22,12 +23,14 @@ void inicializa(Lista* lista){
     lista->fim = NULL;
 }
 
-int insere_ini(Lista* lista, int n){
+int insere_ini(Lista* lista, Info* n){
 
     No* novo = (No*) malloc(sizeof(No));
     if(novo == NULL){return 0;}
 
-    novo->info.matricula = n;
+    novo->info.matricula = n->matricula;
+    strcpy(novo->info.email, n->email);
+    strcpy(novo->info.nome, n->nome);
     novo->prox = lista->ini;
     lista->ini = novo;
 
@@ -38,13 +41,15 @@ int insere_ini(Lista* lista, int n){
     return 1;
 }
 
-int insere_fim(Lista* lista,int n){
+int insere_fim(Lista* lista,Info* n){
 
     No* novo = (No*) malloc(sizeof(No));
     if(!novo){return 0;}
 
     novo->prox = NULL;
-    novo->info.matricula = n;
+    novo->info.matricula = n->matricula;
+    strcpy(novo->info.email, n->email);
+    strcpy(novo->info.nome, n->nome);
 
     if(lista->ini == NULL){
         lista->ini = novo;
@@ -58,21 +63,23 @@ int insere_fim(Lista* lista,int n){
     return 1;
 }
 
-int insere_ord(Lista* lista, int n){
+int insere_ord(Lista* lista, Info* n){
 
-   if (lista->ini==NULL || n < lista->ini->info.matricula){
+   if (lista->ini==NULL || n->matricula < lista->ini->info.matricula){
         insere_ini(lista,n);
         return 1;
      }
 
     No* novo = (No*) malloc(sizeof(No));
     if(!novo){return 0;}
-    novo->info.matricula = n;
+    novo->info.matricula = n->matricula;
+    strcpy(novo->info.email, n->email);
+    strcpy(novo->info.nome, n->nome);
     novo->prox = NULL;
 
     No* ant = NULL;
     No* aux = lista->ini;
-    while(aux != NULL && aux->info.matricula < n){
+    while(aux != NULL && aux->info.matricula < n->matricula){
         ant = aux;
         aux = aux->prox;
     }
@@ -118,21 +125,70 @@ int exclui_fim(Lista* lista){
     return 1;
 }
 
+char* obteremail(Lista* lista,Info* n){
+    No* aux = lista->ini;
+    while (aux != NULL) {
+        if (aux->info.matricula == n->matricula) {
+            return aux->info.email;
+        }
+        aux = aux->prox;
+    }
+    return NULL;
+}
+
+char* obternome(Lista* lista,Info* n){
+    No* aux = lista->ini;
+    while(aux !=NULL){
+        if(aux->info.nome == n->nome){
+            return aux->info.nome;
+        }
+        aux = aux->prox;
+    }
+    return NULL;
+}
+
+int contaelementos(Lista* lista){
+    No* aux = lista->ini;
+    int cont = 0;
+    while(aux!=NULL){
+        cont++;
+        aux = aux->prox;
+    }
+    return cont;
+}
+
 int main() {
     Lista lista;
     inicializa(&lista);
 
-    insere_ord(&lista, 20);
-    insere_ord(&lista, 10);
-    insere_ord(&lista, 30);
-    insere_ord(&lista, 25);
-    insere_ini(&lista, 2);
-    insere_fim(&lista, 35);
+    Info dados;
+    Info dados2;
+    strcpy(dados.email, "ossena.cic@uesc.br");
+    strcpy(dados.nome, "olinoedson");
+    dados.matricula = 202410516;
+
+    strcpy(dados2.email, "kjsantos.cic@uesc.br");
+    strcpy(dados2.nome, "kaiala");
+    dados2.matricula = 202410514;
+
+    insere_ini(&lista,&dados);
+    insere_ord(&lista,&dados2);
+    char* email = obteremail(&lista,&dados);
+
+    int cont = contaelementos(&lista);
+
+    printf("%d\n\n",cont);
 
     No* p = lista.ini;
     while (p != NULL) {
-        printf("%d ", p->info.matricula);
+        printf("matricula:%d \nemail:%s \nnome:%s \n\n", p->info.matricula,p->info.email,p->info.nome);
         p = p->prox;
+    }
+
+     if (email != NULL) {
+        printf("Email encontrado: %s\n", email);
+    } else {
+        printf("Matrícula não encontrada.\n");
     }
 
     return 0;
