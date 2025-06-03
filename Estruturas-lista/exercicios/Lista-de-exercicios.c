@@ -55,3 +55,37 @@ int insere_fim(Lista* lista,int n){
 
     return 1;
 }
+
+int insere_ord(Lista* lista, int n){
+
+    No* novo = (No*) malloc(sizeof(No));
+    if(!novo){return 0;}
+    novo->info.matricula = n;
+    novo->prox = NULL;
+
+    if(lista->ini == NULL){
+        lista->ini = novo;
+        lista->fim = novo;
+        return 1;
+    }
+     if (n < lista->ini->info.matricula){
+        insere_ini(lista,n);
+        return 1;
+     }
+
+    No* ant = NULL;
+    No* aux = lista->ini;
+    while(aux != NULL && aux->info.matricula < n){
+        ant = aux;
+        aux = aux->prox;
+    }
+    novo->prox = aux;
+    aux->prox = novo;
+
+    if (aux == NULL) {
+        lista->fim = novo;
+    }
+
+    return 1;
+}
+
