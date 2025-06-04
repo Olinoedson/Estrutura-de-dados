@@ -5,7 +5,7 @@
 typedef struct TInfo{
 int matricula;
 char nome[30];
-char email[15];
+char email[20];
 }Info;
 
 typedef struct TNo{
@@ -157,34 +157,93 @@ int contaelementos(Lista* lista){
     return cont;
 }
 
-int main() {
-    Lista lista;
-    inicializa(&lista);
+void ordena(Lista* lista) {
+    if (!lista || !lista->ini || !lista->ini->prox) return;
 
-    Info dados;
-    Info dados2;
-    strcpy(dados.email, "ossena.cic@uesc.br");
-    strcpy(dados.nome, "olinoedson");
-    dados.matricula = 202410516;
+    int trocou;
+    No* aux;
+    No* fim = NULL;
 
-    strcpy(dados2.email, "kjsantos.cic@uesc.br");
-    strcpy(dados2.nome, "kaiala");
-    dados2.matricula = 202410514;
+    do {
+        trocou = 0;
+        aux = lista->ini;
 
-    insere_ini(&lista,&dados);
-    insere_ord(&lista,&dados2);
-    char* email = obteremail(&lista,&dados);
+        while (aux->prox != fim) {
+            if (aux->info.matricula > aux->prox->info.matricula) {
+                Info temp = aux->info;
+                aux->info = aux->prox->info;
+                aux->prox->info = temp;
+                trocou = 1;
+            }
+            aux = aux->prox;
+        }
 
-    int cont = contaelementos(&lista);
+        fim = aux;
+    } while (trocou);
+}
 
-    printf("%d\n\n",cont);
+void contacatena(Lista* lista1, Lista* lista2){
 
-    No* p = lista.ini;
+    if(!lista1->ini || !lista2->ini)return;
+    if(!lista1->ini){
+        lista1->ini = lista2->ini;
+        lista1->fim = lista2->fim;
+    }else if (lista2->ini != NULL){
+
+    lista1->fim->prox = lista2->ini;
+    lista1->fim = lista2->fim;
+    }
+
+    lista2->ini = NULL;
+    lista2->fim = NULL;
+
+
+}
+
+void mostraLista(Lista* lista){
+    if(!lista->ini)return;
+     No* p = lista->ini;
     while (p != NULL) {
         printf("matricula:%d \nemail:%s \nnome:%s \n\n", p->info.matricula,p->info.email,p->info.nome);
         p = p->prox;
     }
 
+}
+
+int main() {
+    Lista lista,lista2;
+    inicializa(&lista);
+    inicializa(&lista2);
+
+    Info dados1 = {202410516,"Olinoedson","ossena.cic@uesc.br"};
+    Info dados2 = {202410514,"Kaiala","kjsantos.cic@uesc.br"};
+    Info dados3 = {202410518,"Samuel","sfsantos.cic@uesc.br"};
+    Info dados4 = {202410517,"Rebecca","rssantos.cic@uesc.br"};
+    Info dados5 = {202410128,"Nathalie","nlbomfim.cic@uesc.br"};
+    Info dados6 = {202410512,"Isaque","ispribeiro.cic@uesc.br"};
+    Info dados7 = {202410506,"Alex","aasantos.cic@uesc.br"};
+
+    insere_ini(&lista,&dados1);
+    insere_ord(&lista,&dados2);
+    insere_ini(&lista,&dados3);
+
+    insere_ini(&lista2,&dados4);
+    insere_fim(&lista2,&dados5);
+    insere_fim(&lista2,&dados6);
+    insere_ini(&lista2,&dados7);
+
+
+    int cont = contaelementos(&lista);
+
+    printf("%d\n\n",cont);
+
+    mostraLista(&lista);
+    contacatena(&lista,&lista2);
+    ordena(&lista);
+
+    mostraLista(&lista);
+
+    char* email = obteremail(&lista,&dados1);
      if (email != NULL) {
         printf("Email encontrado: %s\n", email);
     } else {
@@ -193,5 +252,3 @@ int main() {
 
     return 0;
 }
-
-
